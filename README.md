@@ -1,0 +1,2 @@
+# Notes
+vibecoded notes app
