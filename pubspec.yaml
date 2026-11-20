@@ -1,4 +1,4 @@
-name: Notepad
+name: notepad
 description: A minimal notes-style Android app with private one-to-one messaging.
 publish_to: "none"
 version: 1.0.0+1
