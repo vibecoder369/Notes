@@ -13,6 +13,8 @@ const ink = Color(0xFFF2F2F2);
 const muted = Color(0xFF8A8A8A);
 const accent = Color(0xFFC9D1D9);
 
+typedef ChatRows = List>;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final configured = supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty;
@@ -583,7 +585,7 @@ class _ChatPageState extends State<ChatPage> {
     return Column(
       children: [
         Expanded(
-          child: StreamBuilder<List>>(
+          child: StreamBuilder<ChatRows>(
             stream: stream,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
