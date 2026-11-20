@@ -13,8 +13,6 @@ const ink = Color(0xFFF2F2F2);
 const muted = Color(0xFF8A8A8A);
 const accent = Color(0xFFC9D1D9);
 
-typedef ChatRows = List>;
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final configured = supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty;
@@ -326,7 +324,7 @@ class _ChatPageState extends State<ChatPage> {
     await _run(() async {
       await _ensureSignedIn();
       final result = await db.rpc('create_room');
-      final data = Map<String, dynamic>.from(result as Map);
+      final data = Map.from(result as Map);
       await _saveRoom(data['room_id'].toString());
       if (mounted) {
         setState(() => inviteCode = data['invite_code'].toString());
@@ -344,7 +342,7 @@ class _ChatPageState extends State<ChatPage> {
     await _run(() async {
       await _ensureSignedIn();
       final result = await db.rpc('join_room', params: {'p_code': code});
-      final data = Map<String, dynamic>.from(result as Map);
+      final data = Map.from(result as Map);
       invite.clear();
       await _saveRoom(data['room_id'].toString());
     });
@@ -585,7 +583,7 @@ class _ChatPageState extends State<ChatPage> {
     return Column(
       children: [
         Expanded(
-          child: StreamBuilder<ChatRows>(
+          child: StreamBuilder(
             stream: stream,
             builder: (context, snapshot) {
               if (snapshot.hasError) {
@@ -594,7 +592,8 @@ class _ChatPageState extends State<ChatPage> {
               if (!snapshot.hasData) {
                 return const Center(child: CircularProgressIndicator());
               }
-              final rows = snapshot.data!;
+              final raw = snapshot.data is List ? snapshot.data as List : const [];
+              final rows = raw.map((e) => Map.from(e as Map)).toList();
               if (rows.isEmpty) {
                 return const Center(child: Text('Say hello 👋', style: TextStyle(color: muted)));
               }
